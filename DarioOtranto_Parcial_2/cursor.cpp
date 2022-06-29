@@ -39,3 +39,60 @@ int pointer(int maxOption, int minOption, int& pointerCursor) // cursor para el 
 	}
 
 }
+bool boardPointer(int maxOption, int minOption, int& pointerCursorX, int& pointerCursorY)	// cursor para el tablero del juego
+{
+
+	char cursor;
+	bool exitToMenu = false;
+	cursor = _getch();
+	switch (cursor)
+	{
+	case 'W':
+	case 'w':
+		pointerCursorY--;
+		if (pointerCursorY < minOption)
+		{
+			pointerCursorY = maxOption;
+		}
+		return false;
+		break;
+	case 'S':
+	case 's':
+		pointerCursorY++;
+		if (pointerCursorY > maxOption)
+		{
+			pointerCursorY = minOption;
+		}
+		return false;
+		break;
+	case 'A':
+	case 'a':
+		pointerCursorX--;
+		if (pointerCursorX < minOption)
+		{
+			pointerCursorX = maxOption;
+		}
+		return false;
+		break;
+	case 'D':
+	case 'd':
+		pointerCursorX++;
+		if (pointerCursorX > maxOption)
+		{
+			pointerCursorX = minOption;
+		}
+		return false;
+		break;
+	case 'E':
+	case 'e':
+		return true;
+		break;
+	case 'P':
+	case 'p':
+		exitToMenu = true;
+		break;
+	default:
+		break;
+	}
+
+}

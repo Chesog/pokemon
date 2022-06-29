@@ -1,12 +1,14 @@
 #pragma once
 #include <iostream>
 #include <Windows.h>
+#include <time.h>
 
 #include "cursor.h"
 
 using namespace std;
 
-struct Pokemon 
+
+struct Pokemon
 {
 	string name;
 	char tag;
@@ -27,9 +29,17 @@ struct Player
 	Pokemon pokemonTeam[6];
 };
 
-enum class ModeSelection {SinglePlayer = 1,MultiPlayer,exitToMenu};
+struct PointerCursorBoard
+{
+	int posX;
+	int posY;
+};
+
+enum class ModeSelection { SinglePlayer = 1, MultiPlayer, exitToMenu };
 
 int modeSelection(int& pointerCursor);
 void singlePLayer(int& pointerCursor);
 void multiPlayer(int& pointerCursor);
-Pokemon pokemonMaker(int& pointerCursor, Player actualPlayer, char pokemonTag, int PokemonLifes, int PokemonLevel, int PokemonDeff);
+void showBoard(Player actualPlayer1, Player actualPlayer2, int boardArrayPlayer1[2][6], int boardArrayPlayer2[2][6], int maxRows, int maxColumns);
+Pokemon pokemonMaker(Player actualPlayer, char pokemonTag, int PokemonLifes, int PokemonLevel, int PokemonDeff);
+Player cpuMaker();
