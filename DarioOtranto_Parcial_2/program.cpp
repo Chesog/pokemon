@@ -5,7 +5,7 @@ void mainMenu()
 	ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
 	SetConsoleTitle((L"Batalla de Pokemones, la venganza de Pikachu"));
 
-	int pointerCursor = 0;
+	int pointerCursor = (int)MenuStates::Gameplay;
 	int menuAnsw = 0;
 
 	bool gameOn = true;
@@ -21,7 +21,7 @@ void mainMenu()
 			menuAnsw = modeSelection(pointerCursor);
 			break;
 		case (int)MenuStates::Rules:
-
+			menuAnsw = showRules();
 			break;
 		case (int)MenuStates::Credits:
 			menuAnsw = credits();
@@ -38,7 +38,6 @@ int showMainMenu(int& pointerCursor)
 {
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD consolecursorposition = { 0,0 };
-
 	int answ;
 	system("cls");
 	SetConsoleTextAttribute(h, 14);

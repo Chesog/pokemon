@@ -11,6 +11,7 @@ using namespace std;
 struct Pokemon
 {
 	string name;
+	int position{};
 	char tag{};
 	int lifes{};
 	int level{};
@@ -31,6 +32,9 @@ struct Player
 	string name{};
 	int pokemonCount{};
 	Pokemon pokemonTeam[6]{};
+	bool playerAtakerSelection = false;
+	bool playerDefenderSelection = false;
+	bool playerAttkSelection = false;
 };
 
 struct PointerCursorBoard
@@ -48,5 +52,5 @@ void multiPlayer(int& pointerCursor);
 void showBoard(Player actualPlayer1, Player actualPlayer2, char boardArrayPlayer1[2][6], char boardArrayPlayer2[2][6], int maxRows, int maxColumns);
 void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1[2][6], char boardArrayPlayer2[2][6], int pokemonAttaker, int pokemonDefender, int attkUsed, int turn, int deffLevel);
 void boardReset(char boardArrayPlayer1[2][6], char boardArrayPlayer2[2][6]);
-Pokemon pokemonMaker(Player actualPlayer, char pokemonTag, int PokemonLifes, int PokemonLevel, int PokemonDeff);
+Pokemon pokemonMaker(Player actualPlayer, char pokemonTag, int PokemonLifes, int PokemonLevel, int PokemonDeff, int& PokemonsToPlace, int Pokemonposition);
 Player cpuMaker();

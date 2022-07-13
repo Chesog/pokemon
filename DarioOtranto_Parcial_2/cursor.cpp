@@ -33,6 +33,11 @@ int pointer(int maxOption, int minOption, int& pointerCursor) // cursor para el 
 	case 'e':
 		return pointerCursor;
 		break;
+	case 'P':
+	case 'p':
+		pointerCursor = 14;
+		return pointerCursor;
+		break;
 	default:
 		return defaultOption;
 		break;

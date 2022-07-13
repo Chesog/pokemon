@@ -3,6 +3,7 @@
 int modeSelection(int& pointerCursor)
 {
 	bool modeSelected = false;
+	pointerCursor == (int)ModeSelection::SinglePlayer;
 	do
 	{
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -106,6 +107,7 @@ void singlePLayer(int& pointerCursor)
 	int pokemonlvl1Deff = 500;
 	int pokemonlvl2Deff = 1000;
 	int pokemonlvl3Deff = 1500;
+	int pokemonsToPlace = 6;
 
 	char boardArrayPlayer1[maxRows][maxColumns]{};
 	char boardArrayPlayer2[maxRows][maxColumns]{};
@@ -125,22 +127,22 @@ void singlePLayer(int& pointerCursor)
 	cout << "\t""\t""Y vamos a ponerle nombre a sus ataques" << endl;
 	cout << endl;
 	system("pause");
-	Pokemon pokemon1Player = pokemonMaker(player1, 'a', pokemonlvl1Lifes, 1, pokemonlvl1Deff);
+	Pokemon pokemon1Player = pokemonMaker(player1, 'a', pokemonlvl1Lifes, 1, pokemonlvl1Deff, pokemonsToPlace, 1);
 	player1.pokemonTeam[0] = pokemon1Player;
 	player1.pokemonCount++;
-	Pokemon pokemon2Player = pokemonMaker(player1, 'b', pokemonlvl1Lifes, 1, pokemonlvl1Deff);
+	Pokemon pokemon2Player = pokemonMaker(player1, 'b', pokemonlvl1Lifes, 1, pokemonlvl1Deff, pokemonsToPlace, 2);
 	player1.pokemonTeam[1] = pokemon2Player;
 	player1.pokemonCount++;
-	Pokemon pokemon3Player = pokemonMaker(player1, 'c', pokemonlvl1Lifes, 1, pokemonlvl1Deff);
+	Pokemon pokemon3Player = pokemonMaker(player1, 'c', pokemonlvl1Lifes, 1, pokemonlvl1Deff, pokemonsToPlace, 3);
 	player1.pokemonTeam[2] = pokemon3Player;
 	player1.pokemonCount++;
-	Pokemon pokemon4Player = pokemonMaker(player1, 'd', pokemonlvl2Lifes, 2, pokemonlvl2Deff);
+	Pokemon pokemon4Player = pokemonMaker(player1, 'd', pokemonlvl2Lifes, 2, pokemonlvl2Deff, pokemonsToPlace, 4);
 	player1.pokemonTeam[3] = pokemon4Player;
 	player1.pokemonCount++;
-	Pokemon pokemon5Player = pokemonMaker(player1, 'e', pokemonlvl2Lifes, 2, pokemonlvl2Deff);
+	Pokemon pokemon5Player = pokemonMaker(player1, 'e', pokemonlvl2Lifes, 2, pokemonlvl2Deff, pokemonsToPlace, 5);
 	player1.pokemonTeam[4] = pokemon5Player;
 	player1.pokemonCount++;
-	Pokemon pokemon6Player = pokemonMaker(player1, 'f', pokemonlvl3Lifes, 3, pokemonlvl3Deff);
+	Pokemon pokemon6Player = pokemonMaker(player1, 'f', pokemonlvl3Lifes, 3, pokemonlvl3Deff, pokemonsToPlace, 6);
 	player1.pokemonTeam[5] = pokemon6Player;
 	player1.pokemonCount++;
 
@@ -149,41 +151,106 @@ void singlePLayer(int& pointerCursor)
 
 	PointerCursorBoard cursorBoard;
 	int PokemonToPlace = 6;
-
-	cout << "Quiere Posicionar manualmente a los Pokemon ?" << endl;
-	cout << endl;
-	cout << "1 = Si" << endl;
-	cout << "2 = No" << endl;
-	cout << "14 = Salir" << endl;
-	cout << endl;
-	cout << player1.name << "---> ";
-	cin >> playerAnsw;
+	bool positionModeSelected = false;
+	int manual = 1;
+	int automatic = 2;
+	int backToMenu = 14;
+	playerAnsw = 0;
+	pointerCursor = 1;
+	do
+	{
+		system("cls");
+		SetConsoleTextAttribute(h, 14);
+		cout << "\t""\t""\t""\t""\t""\t""\t"".------------------------------------------." << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""| Como quiere que se ordenen los pokemones |" << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""'------------------------------------------'" << endl;
+		cout << endl;
+		if (pointerCursor == manual)
+		{
+			SetConsoleTextAttribute(h, 224);
+		}
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t"".-------------." << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""| Modo Manual |" << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""'-------------'" << endl;
+		SetConsoleTextAttribute(h, 14);
+		if (pointerCursor == automatic)
+		{
+			SetConsoleTextAttribute(h, 224);
+		}
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t"".-----------------." << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""| Modo Automatico |" << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""'-----------------'" << endl;
+		SetConsoleTextAttribute(h, 14);
+		cout << endl;
+		SetConsoleTextAttribute(h, 11);
+		cout << "\t""Usar W para subir" << endl;
+		cout << "\t""Usar S para bajar" << endl;
+		cout << "\t""Usar E para selecionar" << endl;
+		cout << "\t""Usar P para Volver al menu" << endl;
+		playerAnsw = pointer(2, 1, pointerCursor);
+		if (playerAnsw != 0)
+		{
+			if (playerAnsw == backToMenu)
+			{
+				return;
+			}
+			else
+			{
+				positionModeSelected = true;
+			}
+		}
+	} while (!positionModeSelected);
 
 	if (playerAnsw == 1)
 	{
-		for (int i = 0; i <= player1.pokemonCount; i++)
+		for (int i = 0; i < player1.pokemonCount; i++)
 		{
 			system("cls");
 			SetConsoleTextAttribute(h, 14);
-			cout << "Pokemones por Colocar " << PokemonToPlace << endl;
+			cout << "\t""\t""Pokemones por Colocar " << PokemonToPlace << endl;
 			showBoard(player1, CPU, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
 			SetConsoleTextAttribute(h, 13);
-			cout << "Selecione la posicion donde va a ir el pokemon" << endl;
-			cout << "Fila ---> ";
+			cout << "\t""\t""Selecione la posicion donde va a ir el pokemon" << endl;
+			cout << "\t""\t""Del 1 al 2" << endl;
+			cout << "\t""\t""Fila ---> ";
 			cin >> cursorBoard.posY;
-			cout << "Columna ---> ";
+			cout << "\t""\t""Del 1 al 6" << endl;
+			cout << "\t""\t""Columna ---> ";
 			cin >> cursorBoard.posX;
-			boardArrayPlayer1[cursorBoard.posY][cursorBoard.posX] = player1.pokemonTeam[i].tag;
-			PokemonToPlace--;
+			if (boardArrayPlayer1[cursorBoard.posY - 1][cursorBoard.posX - 1] == 0)
+			{
+				boardArrayPlayer1[cursorBoard.posY - 1][cursorBoard.posX - 1] = player1.pokemonTeam[i].tag;
+				PokemonToPlace--;
+			}
+			else if (cursorBoard.posY - 1 > maxRows || cursorBoard.posX - 1 > maxColumns)
+			{
+				cout << "\t""\t""Fuera De Rango" << endl;
+				system("pause");
+				i--;
+			}
+			else
+			{
+				cout << "\t""\t""Ya hay un pokemon en este espacio" << endl;
+				system("pause");
+				i--;
+			}
 		}
 	}
 	else if (playerAnsw == 2)
 	{
-		for (int i = 0; i <= player1.pokemonCount; i++)
+		for (int i = 0; i < player1.pokemonCount; i++)
 		{
-			cursorBoard.posY = rand() % 1;
+			cursorBoard.posY = rand() % 2;
 			cursorBoard.posX = rand() % 6;
-			boardArrayPlayer1[cursorBoard.posY][cursorBoard.posX] = player1.pokemonTeam[i].tag;
+			if (boardArrayPlayer1[cursorBoard.posY][cursorBoard.posX] == 0)
+			{
+				boardArrayPlayer1[cursorBoard.posY][cursorBoard.posX] = player1.pokemonTeam[i].tag;
+				PokemonToPlace--;
+			}
+			else
+			{
+				i--;
+			}
 		}
 	}
 	else
@@ -191,152 +258,516 @@ void singlePLayer(int& pointerCursor)
 		return;
 	}
 
-	for (int i = 0; i <= CPU.pokemonCount; i++)
+	for (int i = 0; i < CPU.pokemonCount; i++)
 	{
-		cursorBoard.posY = rand() % 1;
+		cursorBoard.posY = rand() % 2;
 		cursorBoard.posX = rand() % 6;
-		boardArrayPlayer2[cursorBoard.posY][cursorBoard.posX] = CPU.pokemonTeam[i].tag;
-	}
-	system("cls");
-	showBoard(player1, CPU, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
-
-	int turn = 0;
-	int pokemonAttaker = 0;
-	int pokemonDefender = 0;
-	int attkUsed = 0;
-	int exit = 0;
-	bool endCondition = false;
-
-	do
-	{
-		system("cls");
-		cout << "Desea Salir ?" << endl;
-		cout << endl;
-		cout << "1 = si" << endl;
-		cout << "2 = no" << endl;
-		cout << endl;
-		cin >> exit;
-		if (exit == 1)
+		if (boardArrayPlayer2[cursorBoard.posY][cursorBoard.posX] == 0)
 		{
-			return;
+			boardArrayPlayer2[cursorBoard.posY][cursorBoard.posX] = CPU.pokemonTeam[i].tag;
+			PokemonToPlace--;
 		}
 		else
 		{
-
-			srand(time(NULL));
-			system("cls");
-			showBoard(player1, CPU, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
-			if (turn == 0)
-			{
-				cout << "Seleccione el pokemon con el que va a atacar" << endl;
-				cout << endl;
-				cout << "\t""\t" << player1.pokemonTeam[0].name << " = 0" << endl;
-				cout << "\t""\t" << player1.pokemonTeam[1].name << " = 1" << endl;
-				cout << "\t""\t" << player1.pokemonTeam[2].name << " = 2" << endl;
-				cout << "\t""\t" << player1.pokemonTeam[3].name << " = 3" << endl;
-				cout << "\t""\t" << player1.pokemonTeam[4].name << " = 4" << endl;
-				cout << "\t""\t" << player1.pokemonTeam[5].name << " = 5" << endl;
-				cout << endl;
-				cout << "\t""\t" << player1.name << "---> ";
-				cin >> pokemonAttaker;
-				cout << "Seleccione el pokemon al que va a atacar" << endl;
-				cout << endl;
-				cout << "\t""\t" << CPU.pokemonTeam[0].name << " = 0" << endl;
-				cout << "\t""\t" << CPU.pokemonTeam[1].name << " = 1" << endl;
-				cout << "\t""\t" << CPU.pokemonTeam[2].name << " = 2" << endl;
-				cout << "\t""\t" << CPU.pokemonTeam[3].name << " = 3" << endl;
-				cout << "\t""\t" << CPU.pokemonTeam[4].name << " = 4" << endl;
-				cout << "\t""\t" << CPU.pokemonTeam[5].name << " = 5" << endl;
-				cout << endl;
-				cout << "\t""\t" << player1.name << "---> ";
-				cin >> pokemonDefender;
-				switch (pokemonAttaker)
-				{
-				case 0:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[0].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[0].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[0].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				case 1:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[1].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[1].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[1].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				case 2:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[2].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[2].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[2].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				case 3:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[3].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[3].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[3].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				case 4:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[4].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[4].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[4].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				case 5:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[5].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[5].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[5].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				default:
-					break;
-				}
-				battle(player1, CPU, boardArrayPlayer1, boardArrayPlayer2, pokemonAttaker, pokemonDefender, attkUsed, turn, CPU.pokemonTeam[pokemonDefender].level);
-				turn = 1;
-				system("pause");
-			}
-			else
-			{
-				pokemonAttaker = rand() % 5;
-				pokemonDefender = rand() % 5;
-				attkUsed = rand() % 3 + 1;
-				battle(player1, CPU, boardArrayPlayer1, boardArrayPlayer2, pokemonAttaker, pokemonDefender, attkUsed, turn, CPU.pokemonTeam[pokemonDefender].level);
-				turn = 0;
-				system("pause");
-			}
-			if (player1.pokemonCount == 0)
-			{
-				endCondition = true;
-			}
-			else if (CPU.pokemonCount == 0)
-			{
-				endCondition = true;
-			}
+			i--;
 		}
+
+	}
+	system("cls");
+
+	int turn = 0;
+	int exitToMenu = 14;
+	int pokemonAttaker = 0;
+	int pokemonDefender = 0;
+	int attkUsed = 0;
+	bool endCondition = false;
+	pointerCursor = 1;
+	do
+	{
+		srand(time(NULL));
+		if (turn == 0)
+		{
+			player1.playerAtakerSelection = false;
+			player1.playerDefenderSelection = false;
+			player1.playerAttkSelection = false;
+			do
+			{
+				system("cls");
+				showBoard(player1, CPU, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""\t""Seleccione el pokemon con el que va a atacar" << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (player1.pokemonTeam[0].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[0].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[0].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[0].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[0].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[0].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[0].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[0].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[1].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[1].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[1].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[1].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[1].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[1].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[1].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[1].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[2].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[2].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[2].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[2].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[2].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[2].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[2].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[2].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[3].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[3].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[3].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[3].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[3].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[3].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[3].tag << endl;
+
+					}
+					cout << "\t""\t" << player1.pokemonTeam[3].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[4].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[4].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[4].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[4].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[4].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[4].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[4].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[4].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[5].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[5].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[5].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[5].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[5].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[5].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[5].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[5].name << endl;
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				SetConsoleTextAttribute(h, 14);
+				cout << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""Usar W para subir" << endl;
+				cout << "\t""Usar S para bajar" << endl;
+				cout << "\t""Usar E para selecionar" << endl;
+				cout << "\t""Usar P para Volver al menu" << endl;
+				pokemonAttaker = pointer(6, 1, pointerCursor);
+				if (pokemonAttaker != 0)
+				{
+					if (pokemonAttaker == exitToMenu)
+					{
+						pokemonAttaker;
+						return;
+					}
+					else
+					{
+						player1.playerAtakerSelection = true;
+					}
+				}
+			} while (!player1.playerAtakerSelection);
+			do
+			{
+				system("cls");
+				showBoard(player1, CPU, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""\t""Seleccione el pokemon al que va a atacar" << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (CPU.pokemonTeam[0].lifes > 0)
+				{
+					if (pointerCursor == CPU.pokemonTeam[0].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << CPU.pokemonTeam[0].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << CPU.pokemonTeam[0].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << CPU.pokemonTeam[0].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << CPU.pokemonTeam[0].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << CPU.pokemonTeam[0].tag << endl;
+					}
+					cout << "\t""\t" << CPU.pokemonTeam[0].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (CPU.pokemonTeam[1].lifes > 0)
+				{
+					if (pointerCursor == CPU.pokemonTeam[1].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << CPU.pokemonTeam[1].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << CPU.pokemonTeam[1].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << CPU.pokemonTeam[1].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << CPU.pokemonTeam[1].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << CPU.pokemonTeam[1].tag << endl;
+					}
+					cout << "\t""\t" << CPU.pokemonTeam[1].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (CPU.pokemonTeam[2].lifes > 0)
+				{
+					if (pointerCursor == CPU.pokemonTeam[2].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << CPU.pokemonTeam[2].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << CPU.pokemonTeam[2].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << CPU.pokemonTeam[2].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << CPU.pokemonTeam[2].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << CPU.pokemonTeam[2].tag << endl;
+					}
+					cout << "\t""\t" << CPU.pokemonTeam[2].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (CPU.pokemonTeam[3].lifes > 0)
+				{
+					if (pointerCursor == CPU.pokemonTeam[3].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << CPU.pokemonTeam[3].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << CPU.pokemonTeam[3].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << CPU.pokemonTeam[3].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << CPU.pokemonTeam[3].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << CPU.pokemonTeam[3].tag << endl;
+
+					}
+					cout << "\t""\t" << CPU.pokemonTeam[3].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (CPU.pokemonTeam[4].lifes > 0)
+				{
+					if (pointerCursor == CPU.pokemonTeam[4].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << CPU.pokemonTeam[4].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << CPU.pokemonTeam[4].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << CPU.pokemonTeam[4].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << CPU.pokemonTeam[4].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << CPU.pokemonTeam[4].tag << endl;
+					}
+					cout << "\t""\t" << CPU.pokemonTeam[4].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (CPU.pokemonTeam[5].lifes > 0)
+				{
+					if (pointerCursor == CPU.pokemonTeam[5].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << CPU.pokemonTeam[5].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << CPU.pokemonTeam[5].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << CPU.pokemonTeam[5].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << CPU.pokemonTeam[5].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << CPU.pokemonTeam[5].tag << endl;
+					}
+					cout << "\t""\t" << CPU.pokemonTeam[5].name << endl;
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				SetConsoleTextAttribute(h, 14);
+				cout << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""Usar W para subir" << endl;
+				cout << "\t""Usar S para bajar" << endl;
+				cout << "\t""Usar E para selecionar" << endl;
+				cout << "\t""Usar P para Volver al menu" << endl;
+				pokemonDefender = pointer(6, 1, pointerCursor);
+				if (pokemonDefender != 0)
+				{
+					if (pokemonDefender == exitToMenu)
+					{
+						pokemonDefender;
+						return;
+					}
+					else
+					{
+						player1.playerDefenderSelection = true;
+					}
+				}
+			} while (!player1.playerDefenderSelection);
+			do
+			{
+				system("cls");
+				showBoard(player1, CPU, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+				SetConsoleTextAttribute(h, 14);
+				cout << "\t""\t""Que ataque vas a usar" << endl;
+				cout << endl;
+				if (pointerCursor == 1)
+				{
+					SetConsoleTextAttribute(h, 224);
+					consolecursorposition = { 80,13 };
+					SetConsoleCursorPosition(h, consolecursorposition);
+					cout << "\t""\t" << "Damage " << CPU.pokemonTeam[pokemonAttaker - 1].attk1Damage << endl;
+				}
+				cout << "\t""\t" << player1.pokemonTeam[pokemonAttaker - 1].attk1Name << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (pointerCursor == 2)
+				{
+					SetConsoleTextAttribute(h, 224);
+					consolecursorposition = { 80,13 };
+					SetConsoleCursorPosition(h, consolecursorposition);
+					cout << "\t""\t" << "Damage " << CPU.pokemonTeam[pokemonAttaker - 1].attk2Damage << endl;
+				}
+				cout << "\t""\t" << player1.pokemonTeam[pokemonAttaker - 1].attk2Name << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (pointerCursor == 3)
+				{
+					SetConsoleTextAttribute(h, 224);
+					consolecursorposition = { 80,13 };
+					SetConsoleCursorPosition(h, consolecursorposition);
+					cout << "\t""\t" << "Damage " << CPU.pokemonTeam[pokemonAttaker - 1].attk3Damage << endl;
+				}
+				cout << "\t""\t" << player1.pokemonTeam[pokemonAttaker - 1].attk3Name << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""Usar W para subir" << endl;
+				cout << "\t""Usar S para bajar" << endl;
+				cout << "\t""Usar E para selecionar" << endl;
+				cout << "\t""Usar P para Volver al menu" << endl;
+				attkUsed = pointer(3, 1, pointerCursor);
+				if (attkUsed != 0)
+				{
+					player1.playerAttkSelection = true;
+				}
+			} while (!player1.playerAttkSelection);
+			system("cls");
+			cout << "\t""\t" << "\t""\t""Accion Jugador 1 " << endl;
+			cout << endl;
+			battle(player1, CPU, boardArrayPlayer1, boardArrayPlayer2, (pokemonAttaker - 1), (pokemonDefender - 1), attkUsed, turn, CPU.pokemonTeam[(pokemonDefender - 1)].level);
+			cout << "\t""\t" << "\t""\t""Pokemon a atacado " << endl;
+			cout << endl;
+			cout << "\t""\t" << "nombre: " << CPU.pokemonTeam[(pokemonDefender - 1)].name << endl;
+			cout << "\t""\t" << "Vida: " << CPU.pokemonTeam[(pokemonDefender - 1)].lifes << endl;
+			cout << "\t""\t" << "Nivel: " << CPU.pokemonTeam[(pokemonDefender - 1)].level << endl;
+			cout << "\t""\t" << "Defensa: " << CPU.pokemonTeam[(pokemonDefender - 1)].Deff << endl;
+			turn = 1;
+			system("pause");
+			cout << endl;
+		}
+		else
+		{
+			pokemonAttaker = rand() % 5;
+			pokemonDefender = rand() % 5;
+			attkUsed = rand() % 3 + 1;
+			cout << "\t""\t" << "\t""\t""Accion CPU" << endl;
+			cout << endl;
+			battle(player1, CPU, boardArrayPlayer1, boardArrayPlayer2, (pokemonAttaker - 1), (pokemonDefender - 1), attkUsed, turn, player1.pokemonTeam[(pokemonDefender - 1)].level);
+			cout << "\t""\t" << "Pokemon a atacado " << endl;
+			cout << endl;
+			cout << "\t""\t" << "nombre: " << player1.pokemonTeam[(pokemonDefender - 1)].name << endl;
+			cout << "\t""\t" << "Vida: " << player1.pokemonTeam[(pokemonDefender - 1)].lifes << endl;
+			cout << "\t""\t" << "Nivel: " << player1.pokemonTeam[(pokemonDefender - 1)].level << endl;
+			cout << "\t""\t" << "Defensa: " << player1.pokemonTeam[(pokemonDefender - 1)].Deff << endl;
+			turn = 0;
+			system("pause");
+		}
+		if (player1.pokemonCount == 0)
+		{
+			endCondition = true;
+		}
+		else if (CPU.pokemonCount == 0)
+		{
+			endCondition = true;
+		}
+
 	} while (!endCondition);
 	if (player1.pokemonCount == 0)
 	{
@@ -372,6 +803,7 @@ void multiPlayer(int& pointerCursor)
 	int pokemonlvl1Deff = 500;
 	int pokemonlvl2Deff = 1000;
 	int pokemonlvl3Deff = 1500;
+	int pokemonsToPlace = 6;
 
 	char boardArrayPlayer1[maxRows][maxColumns]{};
 	char boardArrayPlayer2[maxRows][maxColumns]{};
@@ -380,7 +812,7 @@ void multiPlayer(int& pointerCursor)
 
 	string player1Name;
 	system("cls");
-	cout << "\t""\t""Antes que nada como te llamas ?" << endl;
+	cout << "\t""\t""Antes que nada como te llamas Jugador 1 ?" << endl;
 	cout << endl;
 	cout << "\t""\t""User ---> ";
 	cin >> player1Name;
@@ -391,28 +823,30 @@ void multiPlayer(int& pointerCursor)
 	cout << "\t""\t""Y vamos a ponerle nombre a sus ataques" << endl;
 	cout << endl;
 	system("pause");
-	Pokemon pokemon1Player = pokemonMaker(player1, 'a', pokemonlvl1Lifes, 1, pokemonlvl1Deff);
+	Pokemon pokemon1Player = pokemonMaker(player1, 'a', pokemonlvl1Lifes, 1, pokemonlvl1Deff, pokemonsToPlace, 1);
 	player1.pokemonTeam[0] = pokemon1Player;
 	player1.pokemonCount++;
-	Pokemon pokemon2Player = pokemonMaker(player1, 'b', pokemonlvl1Lifes, 1, pokemonlvl1Deff);
+	Pokemon pokemon2Player = pokemonMaker(player1, 'b', pokemonlvl1Lifes, 1, pokemonlvl1Deff, pokemonsToPlace, 2);
 	player1.pokemonTeam[1] = pokemon2Player;
 	player1.pokemonCount++;
-	Pokemon pokemon3Player = pokemonMaker(player1, 'c', pokemonlvl1Lifes, 1, pokemonlvl1Deff);
+	Pokemon pokemon3Player = pokemonMaker(player1, 'c', pokemonlvl1Lifes, 1, pokemonlvl1Deff, pokemonsToPlace, 3);
 	player1.pokemonTeam[2] = pokemon3Player;
 	player1.pokemonCount++;
-	Pokemon pokemon4Player = pokemonMaker(player1, 'd', pokemonlvl2Lifes, 2, pokemonlvl2Deff);
+	Pokemon pokemon4Player = pokemonMaker(player1, 'd', pokemonlvl2Lifes, 2, pokemonlvl2Deff, pokemonsToPlace, 4);
 	player1.pokemonTeam[3] = pokemon4Player;
 	player1.pokemonCount++;
-	Pokemon pokemon5Player = pokemonMaker(player1, 'e', pokemonlvl2Lifes, 2, pokemonlvl2Deff);
+	Pokemon pokemon5Player = pokemonMaker(player1, 'e', pokemonlvl2Lifes, 2, pokemonlvl2Deff, pokemonsToPlace, 5);
 	player1.pokemonTeam[4] = pokemon5Player;
 	player1.pokemonCount++;
-	Pokemon pokemon6Player = pokemonMaker(player1, 'f', pokemonlvl3Lifes, 3, pokemonlvl3Deff);
+	Pokemon pokemon6Player = pokemonMaker(player1, 'f', pokemonlvl3Lifes, 3, pokemonlvl3Deff, pokemonsToPlace, 6);
 	player1.pokemonTeam[5] = pokemon6Player;
 	player1.pokemonCount++;
 
+	pokemonsToPlace = 6;
+
 	string player2Name;
 	system("cls");
-	cout << "\t""\t""Antes que nada como te llamas ?" << endl;
+	cout << "\t""\t""Antes que nada como te llamas Jugador 2 ?" << endl;
 	cout << endl;
 	cout << "\t""\t""User ---> ";
 	cin >> player2Name;
@@ -423,343 +857,1193 @@ void multiPlayer(int& pointerCursor)
 	cout << "\t""\t""Y vamos a ponerle nombre a sus ataques" << endl;
 	cout << endl;
 	system("pause");
-	Pokemon pokemon1Player = pokemonMaker(player2, 'a', pokemonlvl1Lifes, 1, pokemonlvl1Deff);
-	player2.pokemonTeam[0] = pokemon1Player;
+	Pokemon pokemon1Player2 = pokemonMaker(player2, 'a', pokemonlvl1Lifes, 1, pokemonlvl1Deff, pokemonsToPlace, 1);
+	player2.pokemonTeam[0] = pokemon1Player2;
 	player2.pokemonCount++;
-	Pokemon pokemon2Player = pokemonMaker(player2, 'b', pokemonlvl1Lifes, 1, pokemonlvl1Deff);
-	player2.pokemonTeam[1] = pokemon2Player;
+	Pokemon pokemon2Player2 = pokemonMaker(player2, 'b', pokemonlvl1Lifes, 1, pokemonlvl1Deff, pokemonsToPlace, 2);
+	player2.pokemonTeam[1] = pokemon2Player2;
 	player2.pokemonCount++;
-	Pokemon pokemon3Player = pokemonMaker(player2, 'c', pokemonlvl1Lifes, 1, pokemonlvl1Deff);
-	player2.pokemonTeam[2] = pokemon3Player;
+	Pokemon pokemon3Player2 = pokemonMaker(player2, 'c', pokemonlvl1Lifes, 1, pokemonlvl1Deff, pokemonsToPlace, 3);
+	player2.pokemonTeam[2] = pokemon3Player2;
 	player2.pokemonCount++;
-	Pokemon pokemon4Player = pokemonMaker(player2, 'd', pokemonlvl2Lifes, 2, pokemonlvl2Deff);
-	player2.pokemonTeam[3] = pokemon4Player;
+	Pokemon pokemon4Player2 = pokemonMaker(player2, 'd', pokemonlvl2Lifes, 2, pokemonlvl2Deff, pokemonsToPlace, 4);
+	player2.pokemonTeam[3] = pokemon4Player2;
 	player2.pokemonCount++;
-	Pokemon pokemon5Player = pokemonMaker(player2, 'e', pokemonlvl2Lifes, 2, pokemonlvl2Deff);
-	player2.pokemonTeam[4] = pokemon5Player;
+	Pokemon pokemon5Player2 = pokemonMaker(player2, 'e', pokemonlvl2Lifes, 2, pokemonlvl2Deff, pokemonsToPlace, 5);
+	player2.pokemonTeam[4] = pokemon5Player2;
 	player2.pokemonCount++;
-	Pokemon pokemon6Player = pokemonMaker(player2, 'f', pokemonlvl3Lifes, 3, pokemonlvl3Deff);
-	player2.pokemonTeam[5] = pokemon6Player;
+	Pokemon pokemon6Player2 = pokemonMaker(player2, 'f', pokemonlvl3Lifes, 3, pokemonlvl3Deff, pokemonsToPlace, 6);
+	player2.pokemonTeam[5] = pokemon6Player2;
 	player2.pokemonCount++;
 	system("cls");
 
-	PointerCursorBoard cursorBoardPlayer1;
-	int PokemonToPlacedPlayer1 = 6;
+	// --------------------------------------- Jugador 1 Colocacion de Pokemones -------------------------------
 
-	cout << "Quiere Posicionar manualmente a los Pokemon ?" << endl;
-	cout << endl;
-	cout << "1 = Si" << endl;
-	cout << "2 = No" << endl;
-	cout << "14 = Salir" << endl;
-	cout << endl;
-	cout << player1.name << "---> ";
-	cin >> playerAnsw;
-
-	if (playerAnsw == 1)
-	{
-		for (int i = 0; i <= player1.pokemonCount; i++)
-		{
-			system("cls");
-			SetConsoleTextAttribute(h, 14);
-			cout << "Pokemones por Colocar " << PokemonToPlacedPlayer1 << endl;
-			showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
-			SetConsoleTextAttribute(h, 13);
-			cout << "Selecione la posicion donde va a ir el pokemon" << endl;
-			cout << "Fila ---> ";
-			cin >> cursorBoardPlayer1.posY;
-			cout << "Columna ---> ";
-			cin >> cursorBoardPlayer1.posX;
-			boardArrayPlayer1[cursorBoardPlayer1.posY][cursorBoardPlayer1.posX] = player1.pokemonTeam[i].tag;
-			PokemonToPlacedPlayer1--;
-		}
-	}
-	else if (playerAnsw == 2)
-	{
-		for (int i = 0; i <= player1.pokemonCount; i++)
-		{
-			cursorBoardPlayer1.posY = rand() % 1;
-			cursorBoardPlayer1.posX = rand() % 6;
-			boardArrayPlayer1[cursorBoardPlayer1.posY][cursorBoardPlayer1.posX] = player1.pokemonTeam[i].tag;
-		}
-	}
-	else
-	{
-		return;
-	}
-
-	PointerCursorBoard cursorBoardPlayer2;
-	int PokemonToPlacedPlayer2 = 6;
-
-	cout << "Quiere Posicionar manualmente a los Pokemon ?" << endl;
-	cout << endl;
-	cout << "1 = Si" << endl;
-	cout << "2 = No" << endl;
-	cout << "14 = Salir" << endl;
-	cout << endl;
-	cout << player2.name << "---> ";
-	cin >> playerAnsw;
-
-	if (playerAnsw == 1)
-	{
-		for (int i = 0; i <= player2.pokemonCount; i++)
-		{
-			system("cls");
-			SetConsoleTextAttribute(h, 14);
-			cout << "Pokemones por Colocar " << PokemonToPlacedPlayer2 << endl;
-			showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
-			SetConsoleTextAttribute(h, 13);
-			cout << "Selecione la posicion donde va a ir el pokemon" << endl;
-			cout << "Fila ---> ";
-			cin >> cursorBoardPlayer2.posY;
-			cout << "Columna ---> ";
-			cin >> cursorBoardPlayer2.posX;
-			boardArrayPlayer2[cursorBoardPlayer2.posY][cursorBoardPlayer2.posX] = player2.pokemonTeam[i].tag;
-			PokemonToPlacedPlayer2--;
-		}
-	}
-	else if (playerAnsw == 2)
-	{
-		for (int i = 0; i <= player2.pokemonCount; i++)
-		{
-			cursorBoardPlayer2.posY = rand() % 1;
-			cursorBoardPlayer2.posX = rand() % 6;
-			boardArrayPlayer2[cursorBoardPlayer2.posY][cursorBoardPlayer2.posX] = player2.pokemonTeam[i].tag;
-		}
-	}
-	else
-	{
-		return;
-	}
-	system("cls");
-	showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
-
-	int turn = 0;
-	int pokemonAttaker = 0;
-	int pokemonDefender = 0;
-	int attkUsed = 0;
-	int exit = 0;
-	bool endCondition = false;
-
+	PointerCursorBoard cursorBoard;
+	int PokemonToPlace = 6;
+	bool positionModeSelected = false;
+	int manual = 1;
+	int automatic = 2;
+	int backToMenu = 14;
+	playerAnsw = 0;
+	pointerCursor = 1;
 	do
 	{
 		system("cls");
-		cout << "Desea Salir ?" << endl;
+		SetConsoleTextAttribute(h, 10);
+		cout << "\t""\t""\t""\t""\t""\t""\t"".----------------------------------------------------." << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""| Como quiere que se ordenen los pokemones Jugador 1 |" << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""'----------------------------------------------------'" << endl;
 		cout << endl;
-		cout << "1 = si" << endl;
-		cout << "2 = no" << endl;
-		cout << endl;
-		cin >> exit;
-		if (exit == 1)
+		if (pointerCursor == manual)
 		{
-			return;
+			SetConsoleTextAttribute(h, 224);
 		}
-		else
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t"".-------------." << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""| Modo Manual |" << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""'-------------'" << endl;
+		SetConsoleTextAttribute(h, 14);
+		if (pointerCursor == automatic)
 		{
-
-			srand(time(NULL));
-			system("cls");
-			showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
-			if (turn == 0)
+			SetConsoleTextAttribute(h, 224);
+		}
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t"".-----------------." << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""| Modo Automatico |" << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""'-----------------'" << endl;
+		SetConsoleTextAttribute(h, 14);
+		cout << endl;
+		SetConsoleTextAttribute(h, 11);
+		cout << "\t""Usar W para subir" << endl;
+		cout << "\t""Usar S para bajar" << endl;
+		cout << "\t""Usar E para selecionar" << endl;
+		cout << "\t""Usar P para Volver al menu" << endl;
+		playerAnsw = pointer(2, 1, pointerCursor);
+		if (playerAnsw != 0)
+		{
+			if (playerAnsw == backToMenu)
 			{
-				cout << "Seleccione el pokemon con el que va a atacar" << endl;
-				cout << endl;
-				cout << "\t""\t" << player1.pokemonTeam[0].name << " = 0" << endl;
-				cout << "\t""\t" << player1.pokemonTeam[1].name << " = 1" << endl;
-				cout << "\t""\t" << player1.pokemonTeam[2].name << " = 2" << endl;
-				cout << "\t""\t" << player1.pokemonTeam[3].name << " = 3" << endl;
-				cout << "\t""\t" << player1.pokemonTeam[4].name << " = 4" << endl;
-				cout << "\t""\t" << player1.pokemonTeam[5].name << " = 5" << endl;
-				cout << endl;
-				cout << "\t""\t" << player1.name << "---> ";
-				cin >> pokemonAttaker;
-				cout << "Seleccione el pokemon al que va a atacar" << endl;
-				cout << endl;
-				cout << "\t""\t" << player2.pokemonTeam[0].name << " = 0" << endl;
-				cout << "\t""\t" << player2.pokemonTeam[1].name << " = 1" << endl;
-				cout << "\t""\t" << player2.pokemonTeam[2].name << " = 2" << endl;
-				cout << "\t""\t" << player2.pokemonTeam[3].name << " = 3" << endl;
-				cout << "\t""\t" << player2.pokemonTeam[4].name << " = 4" << endl;
-				cout << "\t""\t" << player2.pokemonTeam[5].name << " = 5" << endl;
-				cout << endl;
-				cout << "\t""\t" << player1.name << "---> ";
-				cin >> pokemonDefender;
-				switch (pokemonAttaker)
-				{
-				case 0:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[0].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[0].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[0].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				case 1:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[1].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[1].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[1].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				case 2:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[2].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[2].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[2].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				case 3:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[3].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[3].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[3].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				case 4:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[4].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[4].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[4].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				case 5:
-					cout << "Que ataque vas a usar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[5].attk1Name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[5].attk2Name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[5].attk3Name << " = 3" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.name << "---> ";
-					cin >> attkUsed;
-					break;
-				default:
-					break;
-				}
-				battle(player1, player2, boardArrayPlayer1, boardArrayPlayer2, pokemonAttaker, pokemonDefender, attkUsed, turn, player2.pokemonTeam[pokemonDefender].level);
-				turn = 1;
-				system("pause");
+				return;
 			}
 			else
 			{
-				srand(time(NULL));
-				system("cls");
-				showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
-				if (turn == 1)
-				{
-					cout << "Seleccione el pokemon con el que va a atacar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player2.pokemonTeam[0].name << " = 0" << endl;
-					cout << "\t""\t" << player2.pokemonTeam[1].name << " = 1" << endl;
-					cout << "\t""\t" << player2.pokemonTeam[2].name << " = 2" << endl;
-					cout << "\t""\t" << player2.pokemonTeam[3].name << " = 3" << endl;
-					cout << "\t""\t" << player2.pokemonTeam[4].name << " = 4" << endl;
-					cout << "\t""\t" << player2.pokemonTeam[5].name << " = 5" << endl;
-					cout << endl;
-					cout << "\t""\t" << player2.name << "---> ";
-					cin >> pokemonAttaker;
-					cout << "Seleccione el pokemon al que va a atacar" << endl;
-					cout << endl;
-					cout << "\t""\t" << player1.pokemonTeam[0].name << " = 0" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[1].name << " = 1" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[2].name << " = 2" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[3].name << " = 3" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[4].name << " = 4" << endl;
-					cout << "\t""\t" << player1.pokemonTeam[5].name << " = 5" << endl;
-					cout << endl;
-					cout << "\t""\t" << player2.name << "---> ";
-					cin >> pokemonDefender;
-					switch (pokemonAttaker)
-					{
-					case 0:
-						cout << "Que ataque vas a usar" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.pokemonTeam[0].attk1Name << " = 1" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[0].attk2Name << " = 2" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[0].attk3Name << " = 3" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.name << "---> ";
-						cin >> attkUsed;
-						break;
-					case 1:
-						cout << "Que ataque vas a usar" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.pokemonTeam[1].attk1Name << " = 1" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[1].attk2Name << " = 2" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[1].attk3Name << " = 3" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.name << "---> ";
-						cin >> attkUsed;
-						break;
-					case 2:
-						cout << "Que ataque vas a usar" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.pokemonTeam[2].attk1Name << " = 1" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[2].attk2Name << " = 2" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[2].attk3Name << " = 3" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.name << "---> ";
-						cin >> attkUsed;
-						break;
-					case 3:
-						cout << "Que ataque vas a usar" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.pokemonTeam[3].attk1Name << " = 1" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[3].attk2Name << " = 2" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[3].attk3Name << " = 3" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.name << "---> ";
-						cin >> attkUsed;
-						break;
-					case 4:
-						cout << "Que ataque vas a usar" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.pokemonTeam[4].attk1Name << " = 1" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[4].attk2Name << " = 2" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[4].attk3Name << " = 3" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.name << "---> ";
-						cin >> attkUsed;
-						break;
-					case 5:
-						cout << "Que ataque vas a usar" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.pokemonTeam[5].attk1Name << " = 1" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[5].attk2Name << " = 2" << endl;
-						cout << "\t""\t" << player2.pokemonTeam[5].attk3Name << " = 3" << endl;
-						cout << endl;
-						cout << "\t""\t" << player2.name << "---> ";
-						cin >> attkUsed;
-						break;
-					default:
-						break;
-					}
-					battle(player1, player2, boardArrayPlayer1, boardArrayPlayer2, pokemonAttaker, pokemonDefender, attkUsed, turn, player1.pokemonTeam[pokemonDefender].level);
-					turn = 0;
-					system("pause");
-				}
-				if (player1.pokemonCount == 0)
-				{
-					endCondition = true;
-				}
-				else if (player2.pokemonCount == 0)
-				{
-					endCondition = true;
-				}
+				positionModeSelected = true;
 			}
 		}
+	} while (!positionModeSelected);
+
+	if (playerAnsw == 1)
+	{
+		for (int i = 0; i < player1.pokemonCount; i++)
+		{
+			system("cls");
+			SetConsoleTextAttribute(h, 14);
+			cout << "\t""\t""Pokemones por Colocar " << PokemonToPlace << endl;
+			showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+			SetConsoleTextAttribute(h, 13);
+			cout << "\t""\t""Selecione la posicion donde va a ir el pokemon" << endl;
+			cout << "\t""\t""Del 1 al 2" << endl;
+			cout << "\t""\t""Fila ---> ";
+			cin >> cursorBoard.posY;
+			cout << "\t""\t""Del 1 al 6" << endl;
+			cout << "\t""\t""Columna ---> ";
+			cin >> cursorBoard.posX;
+			if (boardArrayPlayer1[cursorBoard.posY - 1][cursorBoard.posX - 1] == 0)
+			{
+				boardArrayPlayer1[cursorBoard.posY - 1][cursorBoard.posX - 1] = player1.pokemonTeam[i].tag;
+				PokemonToPlace--;
+			}
+			else if (cursorBoard.posY - 1 > maxRows || cursorBoard.posX - 1 > maxColumns)
+			{
+				cout << "\t""\t""Fuera De Rango" << endl;
+				system("pause");
+				i--;
+			}
+			else
+			{
+				cout << "\t""\t""Ya hay un pokemon en este espacio" << endl;
+				system("pause");
+				i--;
+			}
+		}
+	}
+	else if (playerAnsw == 2)
+	{
+		for (int i = 0; i < player1.pokemonCount; i++)
+		{
+			cursorBoard.posY = rand() % 2;
+			cursorBoard.posX = rand() % 6;
+			if (boardArrayPlayer1[cursorBoard.posY][cursorBoard.posX] == 0)
+			{
+				boardArrayPlayer1[cursorBoard.posY][cursorBoard.posX] = player1.pokemonTeam[i].tag;
+				PokemonToPlace--;
+			}
+			else
+			{
+				i--;
+			}
+		}
+	}
+	else
+	{
+		return;
+	}
+	// --------------------------------------- Fin Jugador 1 Colocacion de Pokemones -------------------------------
+
+	// --------------------------------------- Jugador 2 Colocacion de Pokemones -------------------------------
+
+	PokemonToPlace = 6;
+	positionModeSelected = false;
+	playerAnsw = 0;
+	pointerCursor = 1;
+	do
+	{
+		system("cls");
+		SetConsoleTextAttribute(h, 11);
+		cout << "\t""\t""\t""\t""\t""\t""\t"".----------------------------------------------------." << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""| Como quiere que se ordenen los pokemones Jugador 2 |" << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""'----------------------------------------------------'" << endl;
+		cout << endl;
+		if (pointerCursor == manual)
+		{
+			SetConsoleTextAttribute(h, 224);
+		}
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t"".-------------." << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""| Modo Manual |" << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""'-------------'" << endl;
+		SetConsoleTextAttribute(h, 14);
+		if (pointerCursor == automatic)
+		{
+			SetConsoleTextAttribute(h, 224);
+		}
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t"".-----------------." << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""| Modo Automatico |" << endl;
+		cout << "\t""\t""\t""\t""\t""\t""\t""\t""\t""'-----------------'" << endl;
+		SetConsoleTextAttribute(h, 14);
+		cout << endl;
+		SetConsoleTextAttribute(h, 11);
+		cout << "\t""Usar W para subir" << endl;
+		cout << "\t""Usar S para bajar" << endl;
+		cout << "\t""Usar E para selecionar" << endl;
+		cout << "\t""Usar P para Volver al menu" << endl;
+		playerAnsw = pointer(2, 1, pointerCursor);
+		if (playerAnsw != 0)
+		{
+			if (playerAnsw == backToMenu)
+			{
+				return;
+			}
+			else
+			{
+				positionModeSelected = true;
+			}
+		}
+	} while (!positionModeSelected);
+
+	if (playerAnsw == 1)
+	{
+		for (int i = 0; i < player2.pokemonCount; i++)
+		{
+			system("cls");
+			SetConsoleTextAttribute(h, 14);
+			cout << "\t""\t""Pokemones por Colocar " << PokemonToPlace << endl;
+			showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+			SetConsoleTextAttribute(h, 13);
+			cout << "\t""\t""Selecione la posicion donde va a ir el pokemon" << endl;
+			cout << "\t""\t""Del 1 al 2" << endl;
+			cout << "\t""\t""Fila ---> ";
+			cin >> cursorBoard.posY;
+			cout << "\t""\t""Del 1 al 6" << endl;
+			cout << "\t""\t""Columna ---> ";
+			cin >> cursorBoard.posX;
+			if (boardArrayPlayer2[cursorBoard.posY - 1][cursorBoard.posX - 1] == 0)
+			{
+				boardArrayPlayer2[cursorBoard.posY - 1][cursorBoard.posX - 1] = player2.pokemonTeam[i].tag;
+				PokemonToPlace--;
+			}
+			else if (cursorBoard.posY - 1 > maxRows || cursorBoard.posX - 1 > maxColumns)
+			{
+				cout << "\t""\t""Fuera De Rango" << endl;
+				system("pause");
+				i--;
+			}
+			else
+			{
+				cout << "\t""\t""Ya hay un pokemon en este espacio" << endl;
+				system("pause");
+				i--;
+			}
+		}
+	}
+	else if (playerAnsw == 2)
+	{
+		for (int i = 0; i < player2.pokemonCount; i++)
+		{
+			cursorBoard.posY = rand() % 2;
+			cursorBoard.posX = rand() % 6;
+			if (boardArrayPlayer2[cursorBoard.posY][cursorBoard.posX] == 0)
+			{
+				boardArrayPlayer2[cursorBoard.posY][cursorBoard.posX] = player2.pokemonTeam[i].tag;
+				PokemonToPlace--;
+			}
+			else
+			{
+				i--;
+			}
+		}
+	}
+	else
+	{
+		return;
+	}
+	// ---------------------------------------  Fin Jugador 2 Colocacion de Pokemones -------------------------------
+
+	int turn = 0;
+	int exitToMenu = 14;
+	int pokemonAttaker = 0;
+	int pokemonDefender = 0;
+	int attkUsed = 0;
+	bool endCondition = false;
+	pointerCursor = 1;
+	do
+	{
+		srand(time(NULL));
+		if (turn == 0)
+		{
+			player1.playerAtakerSelection = false;
+			player1.playerDefenderSelection = false;
+			player1.playerAttkSelection = false;
+			do
+			{
+				system("cls");
+				showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""\t""\t""\t""\t""\t""Turno Jugador " << player1.name << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""\t""Seleccione el pokemon con el que va a atacar" << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (player1.pokemonTeam[0].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[0].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[0].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[0].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[0].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[0].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[0].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[0].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[1].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[1].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[1].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[1].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[1].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[1].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[1].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[1].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[2].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[2].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[2].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[2].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[2].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[2].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[2].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[2].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[3].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[3].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[3].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[3].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[3].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[3].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[3].tag << endl;
+
+					}
+					cout << "\t""\t" << player1.pokemonTeam[3].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[4].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[4].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[4].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[4].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[4].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[4].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[4].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[4].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[5].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[5].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[5].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[5].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[5].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[5].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[5].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[5].name << endl;
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				SetConsoleTextAttribute(h, 14);
+				cout << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""Usar W para subir" << endl;
+				cout << "\t""Usar S para bajar" << endl;
+				cout << "\t""Usar E para selecionar" << endl;
+				cout << "\t""Usar P para Volver al menu" << endl;
+				pokemonAttaker = pointer(6, 1, pointerCursor);
+				if (pokemonAttaker != 0)
+				{
+					if (pokemonAttaker == exitToMenu)
+					{
+						pokemonAttaker;
+						return;
+					}
+					else
+					{
+						player1.playerAtakerSelection = true;
+					}
+				}
+			} while (!player1.playerAtakerSelection);
+			do
+			{
+				system("cls");
+				showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+				cout << "\t""\t""\t""\t""\t""\t""Turno Jugador " << player1.name << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""\t""Seleccione el pokemon al que va a atacar" << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (player2.pokemonTeam[0].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[0].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[0].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[0].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[0].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[0].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[0].tag << endl;
+					}
+					cout << "\t""\t" << player2.pokemonTeam[0].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player2.pokemonTeam[1].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[1].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[1].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[1].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[1].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[1].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[1].tag << endl;
+					}
+					cout << "\t""\t" << player2.pokemonTeam[1].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player2.pokemonTeam[2].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[2].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[2].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[2].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[2].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[2].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[2].tag << endl;
+					}
+					cout << "\t""\t" << player2.pokemonTeam[2].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player2.pokemonTeam[3].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[3].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[3].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[3].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[3].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[3].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[3].tag << endl;
+
+					}
+					cout << "\t""\t" << player2.pokemonTeam[3].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player2.pokemonTeam[4].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[4].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[4].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[4].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[4].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[4].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[4].tag << endl;
+					}
+					cout << "\t""\t" << player2.pokemonTeam[4].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player2.pokemonTeam[5].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[5].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[5].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[5].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[5].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[5].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[5].tag << endl;
+					}
+					cout << "\t""\t" << player2.pokemonTeam[5].name << endl;
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				SetConsoleTextAttribute(h, 14);
+				cout << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""Usar W para subir" << endl;
+				cout << "\t""Usar S para bajar" << endl;
+				cout << "\t""Usar E para selecionar" << endl;
+				cout << "\t""Usar P para Volver al menu" << endl;
+				pokemonDefender = pointer(6, 1, pointerCursor);
+				if (pokemonDefender != 0)
+				{
+					if (pokemonDefender == exitToMenu)
+					{
+						pokemonDefender;
+						return;
+					}
+					else
+					{
+						player1.playerDefenderSelection = true;
+					}
+				}
+			} while (!player1.playerDefenderSelection);
+			do
+			{
+				system("cls");
+				showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+				cout << "\t""\t""\t""\t""\t""\t""Turno Jugador " << player1.name << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 14);
+				cout << "\t""\t""Que ataque vas a usar" << endl;
+				cout << endl;
+				if (pointerCursor == 1)
+				{
+					SetConsoleTextAttribute(h, 224);
+					consolecursorposition = { 80,13 };
+					SetConsoleCursorPosition(h, consolecursorposition);
+					cout << "\t""\t" << "Damage " << player2.pokemonTeam[pokemonAttaker - 1].attk1Damage << endl;
+				}
+				cout << "\t""\t" << player1.pokemonTeam[pokemonAttaker - 1].attk1Name << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (pointerCursor == 2)
+				{
+					SetConsoleTextAttribute(h, 224);
+					consolecursorposition = { 80,13 };
+					SetConsoleCursorPosition(h, consolecursorposition);
+					cout << "\t""\t" << "Damage " << player2.pokemonTeam[pokemonAttaker - 1].attk2Damage << endl;
+				}
+				cout << "\t""\t" << player1.pokemonTeam[pokemonAttaker - 1].attk2Name << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (pointerCursor == 3)
+				{
+					SetConsoleTextAttribute(h, 224);
+					consolecursorposition = { 80,13 };
+					SetConsoleCursorPosition(h, consolecursorposition);
+					cout << "\t""\t" << "Damage " << player2.pokemonTeam[pokemonAttaker - 1].attk3Damage << endl;
+				}
+				cout << "\t""\t" << player1.pokemonTeam[pokemonAttaker - 1].attk3Name << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""Usar W para subir" << endl;
+				cout << "\t""Usar S para bajar" << endl;
+				cout << "\t""Usar E para selecionar" << endl;
+				cout << "\t""Usar P para Volver al menu" << endl;
+				attkUsed = pointer(3, 1, pointerCursor);
+				if (attkUsed != 0)
+				{
+					player1.playerAttkSelection = true;
+				}
+			} while (!player1.playerAttkSelection);
+			system("cls");
+			cout << "\t""\t" << "\t""\t""Accion Jugador 1 " << player1.name << endl;
+			cout << endl;
+			battle(player1, player2, boardArrayPlayer1, boardArrayPlayer2, (pokemonAttaker - 1), (pokemonDefender - 1), attkUsed, turn, player2.pokemonTeam[(pokemonDefender - 1)].level);
+			cout << "\t""\t" << "\t""\t""Pokemon a atacado " << endl;
+			cout << endl;
+			cout << "\t""\t" << "nombre: " << player2.pokemonTeam[(pokemonDefender - 1)].name << endl;
+			cout << "\t""\t" << "Vida: " << player2.pokemonTeam[(pokemonDefender - 1)].lifes << endl;
+			cout << "\t""\t" << "Nivel: " << player2.pokemonTeam[(pokemonDefender - 1)].level << endl;
+			cout << "\t""\t" << "Defensa: " << player2.pokemonTeam[(pokemonDefender - 1)].Deff << endl;
+			turn = 1;
+			system("pause");
+			cout << endl;
+		}
+		else
+		{
+			player2.playerAtakerSelection = false;
+			player2.playerDefenderSelection = false;
+			player2.playerAttkSelection = false;
+			do
+			{
+				system("cls");
+				showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""\t""\t""\t""\t""\t""Turno Jugador " << player2.name << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""\t""Seleccione el pokemon con el que va a atacar" << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (player2.pokemonTeam[0].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[0].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[0].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[0].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[0].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[0].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[0].tag << endl;
+					}
+					cout << "\t""\t" << player2.pokemonTeam[0].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player2.pokemonTeam[1].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[1].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[1].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[1].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[1].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[1].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[1].tag << endl;
+					}
+					cout << "\t""\t" << player2.pokemonTeam[1].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player2.pokemonTeam[2].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[2].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[2].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[2].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[2].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[2].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[2].tag << endl;
+					}
+					cout << "\t""\t" << player2.pokemonTeam[2].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player2.pokemonTeam[3].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[3].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[3].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[3].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[3].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[3].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[3].tag << endl;
+
+					}
+					cout << "\t""\t" << player2.pokemonTeam[3].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player2.pokemonTeam[4].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[4].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[4].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[4].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[4].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[4].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[4].tag << endl;
+					}
+					cout << "\t""\t" << player2.pokemonTeam[4].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player2.pokemonTeam[5].lifes > 0)
+				{
+					if (pointerCursor == player2.pokemonTeam[5].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player2.pokemonTeam[5].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player2.pokemonTeam[5].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player2.pokemonTeam[5].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player2.pokemonTeam[5].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player2.pokemonTeam[5].tag << endl;
+					}
+					cout << "\t""\t" << player2.pokemonTeam[5].name << endl;
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				SetConsoleTextAttribute(h, 14);
+				cout << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""Usar W para subir" << endl;
+				cout << "\t""Usar S para bajar" << endl;
+				cout << "\t""Usar E para selecionar" << endl;
+				cout << "\t""Usar P para Volver al menu" << endl;
+				pokemonAttaker = pointer(6, 1, pointerCursor);
+				if (pokemonAttaker != 0)
+				{
+					if (pokemonAttaker == exitToMenu)
+					{
+						pokemonAttaker;
+						return;
+					}
+					else
+					{
+						player2.playerAtakerSelection = true;
+					}
+				}
+			} while (!player2.playerAtakerSelection);
+			do
+			{
+				system("cls");
+				showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+				cout << "\t""\t""\t""\t""\t""\t""Turno Jugador " << player2.name << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""\t""Seleccione el pokemon al que va a atacar" << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (player1.pokemonTeam[0].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[0].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[0].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[0].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[0].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[0].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[0].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[0].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[1].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[1].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[1].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[1].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[1].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[1].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[1].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[1].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[2].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[2].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[2].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[2].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[2].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[2].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[2].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[2].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[3].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[3].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[3].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[3].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[3].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[3].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[3].tag << endl;
+
+					}
+					cout << "\t""\t" << player1.pokemonTeam[3].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[4].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[4].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[4].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[4].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[4].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[4].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[4].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[4].name << endl;
+					SetConsoleTextAttribute(h, 14);
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				if (player1.pokemonTeam[5].lifes > 0)
+				{
+					if (pointerCursor == player1.pokemonTeam[5].position)
+					{
+						SetConsoleTextAttribute(h, 10);
+						consolecursorposition = { 80,13 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Name " << player1.pokemonTeam[5].name << endl;
+						consolecursorposition = { 80,14 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Level " << player1.pokemonTeam[5].level << endl;
+						consolecursorposition = { 80,15 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Lifes " << player1.pokemonTeam[5].lifes << endl;
+						consolecursorposition = { 80,16 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Deff " << player1.pokemonTeam[5].Deff << endl;
+						consolecursorposition = { 80,17 };
+						SetConsoleCursorPosition(h, consolecursorposition);
+						cout << "\t""\t" << "Pokemon Tag " << player1.pokemonTeam[5].tag << endl;
+					}
+					cout << "\t""\t" << player1.pokemonTeam[5].name << endl;
+				}
+				else
+				{
+					pointerCursor++;
+				}
+				SetConsoleTextAttribute(h, 14);
+				cout << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""Usar W para subir" << endl;
+				cout << "\t""Usar S para bajar" << endl;
+				cout << "\t""Usar E para selecionar" << endl;
+				cout << "\t""Usar P para Volver al menu" << endl;
+				pokemonDefender = pointer(6, 1, pointerCursor);
+				if (pokemonDefender != 0)
+				{
+					if (pokemonDefender == exitToMenu)
+					{
+						pokemonDefender;
+						return;
+					}
+					else
+					{
+						player2.playerDefenderSelection = true;
+					}
+				}
+			} while (!player2.playerDefenderSelection);
+			do
+			{
+				system("cls");
+				showBoard(player1, player2, boardArrayPlayer1, boardArrayPlayer2, maxRows, maxColumns);
+				cout << "\t""\t""\t""\t""\t""\t""Turno Jugador " << player2.name << endl;
+				cout << endl;
+				SetConsoleTextAttribute(h, 14);
+				cout << "\t""\t""Que ataque vas a usar" << endl;
+				cout << endl;
+				if (pointerCursor == 1)
+				{
+					SetConsoleTextAttribute(h, 224);
+					consolecursorposition = { 80,13 };
+					SetConsoleCursorPosition(h, consolecursorposition);
+					cout << "\t""\t" << "Damage " << player2.pokemonTeam[pokemonAttaker - 1].attk1Damage << endl;
+				}
+				cout << "\t""\t" << player2.pokemonTeam[pokemonAttaker - 1].attk1Name << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (pointerCursor == 2)
+				{
+					SetConsoleTextAttribute(h, 224);
+					consolecursorposition = { 80,13 };
+					SetConsoleCursorPosition(h, consolecursorposition);
+					cout << "\t""\t" << "Damage " << player2.pokemonTeam[pokemonAttaker - 1].attk2Damage << endl;
+				}
+				cout << "\t""\t" << player2.pokemonTeam[pokemonAttaker - 1].attk2Name << endl;
+				SetConsoleTextAttribute(h, 14);
+				if (pointerCursor == 3)
+				{
+					SetConsoleTextAttribute(h, 224);
+					consolecursorposition = { 80,13 };
+					SetConsoleCursorPosition(h, consolecursorposition);
+					cout << "\t""\t" << "Damage " << player2.pokemonTeam[pokemonAttaker - 1].attk3Damage << endl;
+				}
+				cout << "\t""\t" << player2.pokemonTeam[pokemonAttaker - 1].attk3Name << endl;
+				SetConsoleTextAttribute(h, 11);
+				cout << "\t""Usar W para subir" << endl;
+				cout << "\t""Usar S para bajar" << endl;
+				cout << "\t""Usar E para selecionar" << endl;
+				cout << "\t""Usar P para Volver al menu" << endl;
+				attkUsed = pointer(3, 1, pointerCursor);
+				if (attkUsed != 0)
+				{
+					player2.playerAttkSelection = true;
+				}
+			} while (!player2.playerAttkSelection);
+			system("cls");
+			cout << "\t""\t" << "\t""\t""Accion Jugador 2 " << player2.name << endl;
+			cout << endl;
+			battle(player1, player2, boardArrayPlayer1, boardArrayPlayer2, (pokemonAttaker - 1), (pokemonDefender - 1), attkUsed, turn, player2.pokemonTeam[(pokemonDefender - 1)].level);
+			cout << "\t""\t" << "\t""\t""Pokemon a atacado " << endl;
+			cout << endl;
+			cout << "\t""\t" << "nombre: " << player2.pokemonTeam[(pokemonDefender - 1)].name << endl;
+			cout << "\t""\t" << "Vida: " << player2.pokemonTeam[(pokemonDefender - 1)].lifes << endl;
+			cout << "\t""\t" << "Nivel: " << player2.pokemonTeam[(pokemonDefender - 1)].level << endl;
+			cout << "\t""\t" << "Defensa: " << player2.pokemonTeam[(pokemonDefender - 1)].Deff << endl;
+			turn = 1;
+			system("pause");
+			cout << endl;
+		}
+		if (player1.pokemonCount == 0)
+		{
+			endCondition = true;
+		}
+		else if (player2.pokemonCount == 0)
+		{
+			endCondition = true;
+		}
+
 	} while (!endCondition);
 	if (player1.pokemonCount == 0)
 	{
@@ -779,12 +2063,8 @@ void multiPlayer(int& pointerCursor)
 void showBoard(Player actualPlayer1, Player actualPlayer2, char boardArrayPlayer1[2][6], char boardArrayPlayer2[2][6], int maxRows, int maxColumns)
 {
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-
-
-	char cardBack = 177;	// dorso de las cartas
-	char cros = 88;		// valor "X" en el tablero
-	char circle = 79;	// valor "O" en el tablero
-
+	SetConsoleTextAttribute(h, 9);
+	char empty = 32;	// valor vacio en el tablero
 	char uperLeftCorner = 201; // esquina superior izquierda ╔
 	char uperRightCorner = 187; // esquina superior derecha ╗
 	char lowerLeftCorner = 200; // esquina inferior izquierda ╚
@@ -797,116 +2077,104 @@ void showBoard(Player actualPlayer1, Player actualPlayer2, char boardArrayPlayer
 	char verticalConection = 204; // conector izquierdo ╠
 	char crosConection = 206; // interseccion ╬
 
-	SetConsoleTextAttribute(h, 13);
 
-	for (int rows = 0; rows < maxRows; rows++) // tablero para el jugador 1
+	//--------------------------- Inicio Dibujado del Tablero del Player 1 ----------------------------------------
+	cout << "\t" "\t" "\t" "\t" "\t""\t" "\t""\t" "\t" << uperLeftCorner;
+	for (int i = 0; i < maxColumns; i++)
 	{
-		if (rows == 0)
-		{
-			cout << "\t""\t""\t""\t""\t""\t""\t""\t" << uperLeftCorner;
-			for (int columns = 0; columns < maxColumns; columns++)
-			{
-				cout << horizontalRow << horizontalRow << horizontalRow;
-				cout << uperConection;
-			}
-			cout << horizontalRow << horizontalRow << horizontalRow << uperRightCorner;
-
-		}
-		else
-		{
-			cout << "\t""\t""\t""\t""\t""\t""\t""\t" << verticalConection;
-			for (int columns = 0; columns < maxColumns; columns++)
-			{
-				cout << horizontalRow << horizontalRow << horizontalRow;
-				cout << crosConection;
-			}
-			cout << horizontalRow << horizontalRow << horizontalRow << horizontalConection;
-		}
-		cout << endl;
-		cout << "\t""\t""\t""\t""\t""\t""\t""\t" << verticalColumn;
+		cout << horizontalRow << horizontalRow << horizontalRow << uperConection;
+	}
+	cout << "\b" << uperRightCorner;
+	cout << endl;
+	for (int rows = 0; rows < maxRows; rows++)
+	{
+		cout << "\t" "\t" "\t" "\t" "\t""\t" "\t""\t" "\t";
 		for (int columns = 0; columns < maxColumns; columns++)
 		{
-			if (boardArrayPlayer1[rows][columns] == 0)
+			if (boardArrayPlayer1[rows][columns] != 0)
 			{
-				cout << " " << " " << " ";
-			}
-			else
-			{
+				cout << verticalColumn;
+				SetConsoleTextAttribute(h, 8);
 				cout << " " << boardArrayPlayer1[rows][columns] << " ";
-			}
-			cout << verticalColumn;
-		}
-		cout << " " << " " << " " << verticalColumn;
-		cout << endl;
-		if (rows == 1)
-		{
-			cout << "\t""\t""\t""\t""\t""\t""\t""\t" << lowerLeftCorner;
-			for (int columns = 0; columns < maxColumns; columns++)
-			{
-				cout << horizontalRow << horizontalRow << horizontalRow;
-				cout << lowerConection;
-			}
-			cout << horizontalRow << horizontalRow << horizontalRow;
-			cout << lowerRightCorner;
-		}
-	}
-	cout << endl;
-
-	for (int rows = 0; rows < maxRows; rows++) // tablero para el jugador 2
-	{
-		if (rows == 0)
-		{
-			cout << "\t""\t""\t""\t""\t""\t""\t""\t" << uperLeftCorner;
-			for (int columns = 0; columns < maxColumns; columns++)
-			{
-				cout << horizontalRow << horizontalRow << horizontalRow;
-				cout << uperConection;
-			}
-			cout << horizontalRow << horizontalRow << horizontalRow << uperRightCorner;
-
-		}
-		else
-		{
-			cout << "\t""\t""\t""\t""\t""\t""\t""\t" << verticalConection;
-			for (int columns = 0; columns < maxColumns; columns++)
-			{
-				cout << horizontalRow << horizontalRow << horizontalRow;
-				cout << crosConection;
-			}
-			cout << horizontalRow << horizontalRow << horizontalRow << horizontalConection;
-		}
-		cout << endl;
-		cout << "\t""\t""\t""\t""\t""\t""\t""\t" << verticalColumn;
-		for (int columns = 0; columns < maxColumns; columns++)
-		{
-			if (boardArrayPlayer2[rows][columns] == 0)
-			{
-				cout << " " << " " << " ";
+				SetConsoleTextAttribute(h, 9);
 			}
 			else
 			{
-				cout << " " << boardArrayPlayer2[rows][columns] << " ";
+				cout << verticalColumn << " " << empty << " ";
 			}
-			cout << verticalColumn;
 		}
-		cout << " " << " " << " " << verticalColumn;
+		cout << verticalColumn;
 		cout << endl;
-		if (rows == 1)
+
+		if (rows != maxRows - 1)
 		{
-			cout << "\t""\t""\t""\t""\t""\t""\t""\t" << lowerLeftCorner;
-			for (int columns = 0; columns < maxColumns; columns++)
+			cout << "\t" "\t" "\t" "\t" "\t""\t" "\t""\t" "\t" << verticalConection;
+			for (int i = 0; i < maxColumns; i++)
 			{
-				cout << horizontalRow << horizontalRow << horizontalRow;
-				cout << lowerConection;
+				cout << horizontalRow << horizontalRow << horizontalRow << crosConection;
 			}
-			cout << horizontalRow << horizontalRow << horizontalRow;
-			cout << lowerRightCorner;
+			cout << "\b" << horizontalConection;
+			cout << endl;
 		}
 	}
+	cout << "\t" "\t" "\t" "\t" "\t""\t" "\t""\t" "\t" << lowerLeftCorner;
+	for (int i = 0; i < maxColumns; i++)
+	{
+		cout << horizontalRow << horizontalRow << horizontalRow << lowerConection;
+	}
+	cout << "\b" << lowerRightCorner;
 	cout << endl;
+	//------------------------------- Fin del dibujado del Tablero Player 1 --------------------------------------------------
+	//--------------------------- Inicio Dibujado del Tablero del Player 2 ----------------------------------------
+	SetConsoleTextAttribute(h, 9);
+	cout << "\t" "\t" "\t" "\t" "\t""\t" "\t""\t" "\t" << uperLeftCorner;
+	for (int i = 0; i < maxColumns; i++)
+	{
+		cout << horizontalRow << horizontalRow << horizontalRow << uperConection;
+	}
+	cout << "\b" << uperRightCorner;
+	cout << endl;
+	for (int rows = 0; rows < maxRows; rows++)
+	{
+		cout << "\t" "\t" "\t" "\t" "\t""\t" "\t""\t" "\t";
+		for (int columns = 0; columns < maxColumns; columns++)
+		{
+			if (boardArrayPlayer2[rows][columns] != 0)
+			{
+				cout << verticalColumn;
+				SetConsoleTextAttribute(h, 8);
+				cout << " " << boardArrayPlayer2[rows][columns] << " ";
+				SetConsoleTextAttribute(h, 9);
+			}
+			else
+			{
+				cout << verticalColumn << " " << empty << " ";
+			}
+		}
+		cout << verticalColumn;
+		cout << endl;
 
+		if (rows != maxRows - 1)
+		{
+			cout << "\t" "\t" "\t" "\t" "\t""\t" "\t""\t" "\t" << verticalConection;
+			for (int i = 0; i < maxColumns; i++)
+			{
+				cout << horizontalRow << horizontalRow << horizontalRow << crosConection;
+			}
+			cout << "\b" << horizontalConection;
+			cout << endl;
+		}
+	}
+	cout << "\t" "\t" "\t" "\t" "\t""\t" "\t""\t" "\t" << lowerLeftCorner;
+	for (int i = 0; i < maxColumns; i++)
+	{
+		cout << horizontalRow << horizontalRow << horizontalRow << lowerConection;
+	}
+	cout << "\b" << lowerRightCorner;
+	cout << endl;
+	//------------------------------- Fin del dibujado del Tablero Player 2 --------------------------------------------------
 }
-Pokemon pokemonMaker(Player actualPlayer, char pokemonTag, int PokemonLifes, int PokemonLevel, int PokemonDeff)
+Pokemon pokemonMaker(Player actualPlayer, char pokemonTag, int PokemonLifes, int PokemonLevel, int PokemonDeff, int& PokemonsToPlace, int Pokemonposition)
 {
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD consolecursorposition = { 0,0 };
@@ -927,6 +2195,7 @@ Pokemon pokemonMaker(Player actualPlayer, char pokemonTag, int PokemonLifes, int
 	int pokemonlvl3Attk2 = 800;
 	int pokemonlvl3Attk3 = 900;
 
+
 	system("cls");
 	SetConsoleTextAttribute(h, 96);
 	cout << R"(
@@ -936,6 +2205,8 @@ Pokemon pokemonMaker(Player actualPlayer, char pokemonTag, int PokemonLifes, int
 						|__|__||_|  |_|_|_||__,||___||___|  |___||___|  |__|   |___||_,_||___||_|_|_||___||_|_|
 						                                                                                       )" << endl;
 	cout << endl;
+	SetConsoleTextAttribute(h, 14);
+	cout << "                                                                                  Pokemons Restantes " << PokemonsToPlace << endl;
 	SetConsoleTextAttribute(h, 14);
 	cout << "\t""\t""Como se va a llamar tu pokemon ?" << endl;
 	cout << "\t""\t" << actualPlayer.name << " ---> ";
@@ -975,6 +2246,9 @@ Pokemon pokemonMaker(Player actualPlayer, char pokemonTag, int PokemonLifes, int
 	aux.lifes = PokemonLifes;
 	aux.level = PokemonLevel;
 	aux.Deff = PokemonDeff;
+	aux.position = Pokemonposition;
+
+	PokemonsToPlace--;
 
 	return aux;
 }
@@ -1012,6 +2286,7 @@ Player cpuMaker()
 	pokemon1Cpu.attk3Name = "Ascuas";
 	pokemon1Cpu.attk3Damage = pokemonlvl1Attk3;
 	aux.pokemonTeam[0] = pokemon1Cpu;
+	aux.pokemonTeam[0].position = 1;
 	aux.pokemonCount++;
 
 	Pokemon pokemon2Cpu;
@@ -1027,6 +2302,7 @@ Player cpuMaker()
 	pokemon2Cpu.attk3Name = "Chorro de Agua";
 	pokemon2Cpu.attk3Damage = pokemonlvl1Attk3;
 	aux.pokemonTeam[1] = pokemon2Cpu;
+	aux.pokemonTeam[1].position = 2;
 	aux.pokemonCount++;
 
 	Pokemon pokemon3Cpu;
@@ -1042,6 +2318,7 @@ Player cpuMaker()
 	pokemon3Cpu.attk3Name = "Latigo Sepa";
 	pokemon3Cpu.attk3Damage = pokemonlvl1Attk3;
 	aux.pokemonTeam[2] = pokemon3Cpu;
+	aux.pokemonTeam[2].position = 3;
 	aux.pokemonCount++;
 
 	Pokemon pokemon4Cpu;
@@ -1057,6 +2334,7 @@ Player cpuMaker()
 	pokemon4Cpu.attk3Name = "Hierba Lazo";
 	pokemon4Cpu.attk3Damage = pokemonlvl2Attk3;
 	aux.pokemonTeam[3] = pokemon4Cpu;
+	aux.pokemonTeam[3].position = 4;
 	aux.pokemonCount++;
 
 	Pokemon pokemon5Cpu;
@@ -1072,6 +2350,7 @@ Player cpuMaker()
 	pokemon5Cpu.attk3Name = "Giro de Fuego";
 	pokemon5Cpu.attk3Damage = pokemonlvl2Attk3;
 	aux.pokemonTeam[4] = pokemon5Cpu;
+	aux.pokemonTeam[4].position = 5;
 	aux.pokemonCount++;
 
 	Pokemon pokemon6Cpu;
@@ -1087,6 +2366,7 @@ Player cpuMaker()
 	pokemon6Cpu.attk3Name = "Cuchilla solar";
 	pokemon6Cpu.attk3Damage = pokemonlvl3Attk3;
 	aux.pokemonTeam[5] = pokemon6Cpu;
+	aux.pokemonTeam[5].position = 6;
 	aux.pokemonCount++;
 
 	return aux;
@@ -1110,7 +2390,7 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 				actualPlayer2.pokemonTeam[pokemonDefender].Deff = actualPlayer2.pokemonTeam[pokemonDefender].Deff - actualPlayer1.pokemonTeam[pokemonAttaker].attk1Damage;
 				cout << "\t""\t""Golpeaste por " << actualPlayer1.pokemonTeam[pokemonAttaker].attk1Damage << endl;
 				cout << "\t""\t""al oponente le queda " << actualPlayer2.pokemonTeam[pokemonDefender].Deff << endl;
-				if (actualPlayer2.pokemonTeam[pokemonDefender].Deff == 0)
+				if (actualPlayer2.pokemonTeam[pokemonDefender].Deff <= 0)
 				{
 					actualPlayer2.pokemonTeam[pokemonDefender].lifes--;
 					if (actualPlayer2.pokemonTeam[pokemonDefender].level == 1)
@@ -1125,7 +2405,7 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 					{
 						actualPlayer2.pokemonTeam[pokemonDefender].Deff = actualPlayer2.pokemonTeam[pokemonDefender].pokemonlvl3DeffDefault;
 					}
-					if (actualPlayer2.pokemonTeam[pokemonDefender].lifes == 0)
+					if (actualPlayer2.pokemonTeam[pokemonDefender].lifes <= 0)
 					{
 						for (int rows = 0; rows < 2; rows++)
 						{
@@ -1145,7 +2425,7 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 				actualPlayer2.pokemonTeam[pokemonDefender].Deff = actualPlayer2.pokemonTeam[pokemonDefender].Deff - actualPlayer1.pokemonTeam[pokemonAttaker].attk2Damage;
 				cout << "\t""\t""Golpeaste por " << actualPlayer1.pokemonTeam[pokemonAttaker].attk2Damage << endl;
 				cout << "\t""\t""al oponente le queda " << actualPlayer2.pokemonTeam[pokemonDefender].Deff << endl;
-				if (actualPlayer2.pokemonTeam[pokemonDefender].Deff == 0)
+				if (actualPlayer2.pokemonTeam[pokemonDefender].Deff <= 0)
 				{
 					actualPlayer2.pokemonTeam[pokemonDefender].lifes--;
 					if (actualPlayer2.pokemonTeam[pokemonDefender].level == 1)
@@ -1160,7 +2440,7 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 					{
 						actualPlayer2.pokemonTeam[pokemonDefender].Deff = actualPlayer2.pokemonTeam[pokemonDefender].pokemonlvl3DeffDefault;
 					}
-					if (actualPlayer2.pokemonTeam[pokemonDefender].lifes == 0)
+					if (actualPlayer2.pokemonTeam[pokemonDefender].lifes <= 0)
 					{
 						for (int rows = 0; rows < 2; rows++)
 						{
@@ -1180,7 +2460,7 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 				actualPlayer2.pokemonTeam[pokemonDefender].Deff = actualPlayer2.pokemonTeam[pokemonDefender].Deff - actualPlayer1.pokemonTeam[pokemonAttaker].attk3Damage;
 				cout << "\t""\t""Golpeaste por " << actualPlayer1.pokemonTeam[pokemonAttaker].attk3Damage << endl;
 				cout << "\t""\t""al oponente le queda " << actualPlayer2.pokemonTeam[pokemonDefender].Deff << endl;
-				if (actualPlayer2.pokemonTeam[pokemonDefender].Deff == 0)
+				if (actualPlayer2.pokemonTeam[pokemonDefender].Deff <= 0)
 				{
 					actualPlayer2.pokemonTeam[pokemonDefender].lifes--;
 					if (actualPlayer2.pokemonTeam[pokemonDefender].level == 1)
@@ -1195,7 +2475,7 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 					{
 						actualPlayer2.pokemonTeam[pokemonDefender].Deff = actualPlayer2.pokemonTeam[pokemonDefender].pokemonlvl3DeffDefault;
 					}
-					if (actualPlayer2.pokemonTeam[pokemonDefender].lifes == 0)
+					if (actualPlayer2.pokemonTeam[pokemonDefender].lifes <= 0)
 					{
 						for (int rows = 0; rows < 2; rows++)
 						{
@@ -1230,7 +2510,7 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 				actualPlayer1.pokemonTeam[pokemonDefender].Deff = actualPlayer1.pokemonTeam[pokemonDefender].Deff - actualPlayer2.pokemonTeam[pokemonAttaker].attk1Damage;
 				cout << "\t""\t""Golpeaste por " << actualPlayer2.pokemonTeam[pokemonAttaker].attk1Damage << endl;
 				cout << "\t""\t""al oponente le queda " << actualPlayer1.pokemonTeam[pokemonDefender].Deff << endl;
-				if (actualPlayer1.pokemonTeam[pokemonDefender].Deff == 0)
+				if (actualPlayer1.pokemonTeam[pokemonDefender].Deff <= 0)
 				{
 					actualPlayer1.pokemonTeam[pokemonDefender].lifes--;
 					if (actualPlayer1.pokemonTeam[pokemonDefender].level == 1)
@@ -1245,7 +2525,7 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 					{
 						actualPlayer1.pokemonTeam[pokemonDefender].Deff = actualPlayer1.pokemonTeam[pokemonDefender].pokemonlvl3DeffDefault;
 					}
-					if (actualPlayer1.pokemonTeam[pokemonDefender].lifes == 0)
+					if (actualPlayer1.pokemonTeam[pokemonDefender].lifes <= 0)
 					{
 						for (int rows = 0; rows < 2; rows++)
 						{
@@ -1265,7 +2545,7 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 				actualPlayer1.pokemonTeam[pokemonDefender].Deff = actualPlayer1.pokemonTeam[pokemonDefender].Deff - actualPlayer2.pokemonTeam[pokemonAttaker].attk2Damage;
 				cout << "\t""\t""Golpeaste por " << actualPlayer2.pokemonTeam[pokemonAttaker].attk2Damage << endl;
 				cout << "\t""\t""al oponente le queda " << actualPlayer1.pokemonTeam[pokemonDefender].Deff << endl;
-				if (actualPlayer1.pokemonTeam[pokemonDefender].Deff == 0)
+				if (actualPlayer1.pokemonTeam[pokemonDefender].Deff <= 0)
 				{
 					actualPlayer1.pokemonTeam[pokemonDefender].lifes--;
 					if (actualPlayer1.pokemonTeam[pokemonDefender].level == 1)
@@ -1280,7 +2560,7 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 					{
 						actualPlayer1.pokemonTeam[pokemonDefender].Deff = actualPlayer1.pokemonTeam[pokemonDefender].pokemonlvl3DeffDefault;
 					}
-					if (actualPlayer1.pokemonTeam[pokemonDefender].lifes == 0)
+					if (actualPlayer1.pokemonTeam[pokemonDefender].lifes <= 0)
 					{
 						for (int rows = 0; rows < 2; rows++)
 						{
@@ -1300,10 +2580,10 @@ void battle(Player& actualPlayer1, Player& actualPlayer2, char boardArrayPlayer1
 				actualPlayer1.pokemonTeam[pokemonDefender].Deff = actualPlayer1.pokemonTeam[pokemonDefender].Deff - actualPlayer2.pokemonTeam[pokemonAttaker].attk3Damage;
 				cout << "\t""\t""Golpeaste por " << actualPlayer2.pokemonTeam[pokemonAttaker].attk3Damage << endl;
 				cout << "\t""\t""al oponente le queda " << actualPlayer1.pokemonTeam[pokemonDefender].Deff << endl;
-				if (actualPlayer2.pokemonTeam[pokemonDefender].Deff == 0)
+				if (actualPlayer1.pokemonTeam[pokemonDefender].Deff <= 0)
 				{
-					actualPlayer2.pokemonTeam[pokemonDefender].lifes--;
-					if (actualPlayer2.pokemonTeam[pokemonDefender].level == 1)
+					actualPlayer1.pokemonTeam[pokemonDefender].lifes--;
+					if (actualPlayer1.pokemonTeam[pokemonDefender].level == 1)
 					{
 						actualPlayer1.pokemonTeam[pokemonDefender].Deff = actualPlayer1.pokemonTeam[pokemonDefender].pokemonlvl1DeffDefault;
 					}
